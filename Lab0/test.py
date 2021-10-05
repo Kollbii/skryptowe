@@ -1,6 +1,7 @@
-from typing import Type
 import main
 import unittest
+from fractions import Fraction
+
 
 class Test_TestSum(unittest.TestCase):
     def test_sum_integer_integer(self):
