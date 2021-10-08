@@ -3,8 +3,7 @@ import re
 def extract(text: str):
     for num in re.findall('[-]?[0-9]+', text): # [0-9] - All single digits [0-9]+ - sequence of single digits
         yield int(num)
-    # for string in re.findall('^([^-]\D+)', text): # \D -> everything but not number. + -> sequence. Optional [^0-9]+. [^\S-] Not white char and dash.
-    for string in re.findall('[^\D+][^-\s+]\D+', text): # \D -> everything but not number. + -> sequence. Optional [^0-9]+. [^\S-] Not white char and dash.
+    for string in re.findall('[^-\s+0-9]\D+', text): # \D -> everything but not number. + -> sequence. Optional [^0-9]+. [^\s-] Not white char and dash.
         yield str(string).strip()  # Optional white chars removal
 
 def start():
