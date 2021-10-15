@@ -1,4 +1,3 @@
-from typing import AnyStr
 import skrypt
 import unittest
 
