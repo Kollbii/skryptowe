@@ -86,7 +86,7 @@ if __name__ == '__main__':
     print("Option: ")
     opt = int(input())
     while opt != 0:
-        os.system('clear')
+        os.system('cls')
         try:
             if opt in [1, 2]:
                 print("Account: ")
