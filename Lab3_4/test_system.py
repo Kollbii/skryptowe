@@ -30,6 +30,3 @@ class Test_DSystem(unittest.TestCase):
         self.assertEqual(term1.setTerm("27 X 2021 8:10 - 27 X 2021 8:30"), True)
         self.assertEqual(term2.setTerm("27 X 2021 8:30 - 28 X 2021 8:00"), True)
         self.assertEqual(term3.setTerm("28 X 2021 12:20 - 28 X 2021 14:20"), True)
-        print(term1)
-        print(term2)
-        print(term3)
