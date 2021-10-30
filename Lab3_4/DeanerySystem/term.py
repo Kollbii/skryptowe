@@ -17,7 +17,7 @@ class Term(object):
                     6: "Sobota",
                     7: "Niedziela",
         }[self._day.value]
-        return "{} {}:{} [{}]".format(rep_day, self.hour, self.minute, self.duration)
+        return "{} {}:{} [{}]".format(rep_day, self.hour, "00" if self.minute == 0 else self.minute, self.duration)
 
     def earlierThan(self, termin):
         day_diff = self._day.difference(termin._day)
