@@ -4,10 +4,44 @@ from DeanerySystem.day import Day
 class Term(object):
 
     def __init__(self, hour, minute, duration = 90, day = Day.MON):
-        self.hour = hour
-        self.minute = minute 
-        self.duration = duration
+        self._hour = hour
+        self._minute = minute 
+        self._duration = duration
         self._day = day
+
+    @property
+    def hour(self):
+        return self._hour
+
+    @hour.setter
+    def setHour(self, hour):
+        self._hour = hour
+
+    @property
+    def minute(self):
+        return self._minute
+
+    @minute.setter
+    def setMinute(self, minute):
+        self._minute = minute
+
+    @property
+    def duration(self):
+        return self._duration
+
+    @duration.setter
+    def setDuration(self, duration):
+        self._duration = duration
+
+    @property
+    def day(self):
+        return self._day
+
+    @day.setter
+    def setDay(self, day):
+        self._day = day
+
+
 
     def __str__(self):
         day = {     1: "Poniedziałek",
@@ -18,13 +52,13 @@ class Term(object):
                     6: "Sobota",
                     7: "Niedziela",
         }[self._day.value]
-        return "{} {}:{} [{}]".format(day ,self.hour, "0"+str(self.minute) if self.minute >= 0 and self.minute <= 9 else self.minute, self.duration)
+        return "{} {}:{} [{}]".format(day ,self._hour, "0"+str(self._minute) if self._minute >= 0 and self._minute <= 9 else self._minute, self._duration)
 
     def earlierThan(self, termin):
-        return False if termin.hour < self.hour else (False if termin.hour == self.hour and termin.minute < self.minute else True) 
+        return False if termin._hour < self._hour else (False if termin._hour == self._hour and termin._minute < self._minute else True) 
 
     def equals(self, termin):
-        return True if self.hour == termin.hour and self.minute == termin.minute and self.duration == termin.duration else False
+        return True if self._day == termin._day and self._hour == termin._hour and self._minute == termin._minute and self._duration == termin._duration else False
     
     def __lt__(self, termin):
         return self.earlierThan(termin)
@@ -42,10 +76,10 @@ class Term(object):
         return self.equals(termin)
 
     def __sub__(self, termin):
-        hour_d  = self.hour + self.duration // 60 - termin.hour
-        min_d   = self.minute + self.duration % 60 - termin.minute 
+        hour_d  = self._hour + self._duration // 60 - termin._hour
+        min_d   = self._minute + self._duration % 60 - termin._minute 
         new_dur = hour_d*60 + min_d
-        return Term(termin.hour, termin.minute, new_dur)
+        return Term(termin._hour, termin._minute, new_dur)
 
     def getDay(self, day, month, year):
         offset = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -111,9 +145,9 @@ class Term(object):
         }[self.getDay(data[0][0], data[0][1], data[0][2])]
 
         try:
-            self.hour = data[0][3]
-            self.minute = data[0][4]
-            self.duration = time_in_minutes
+            self._hour = data[0][3]
+            self._minute = data[0][4]
+            self._duration = time_in_minutes
             self._day = new_day
         except Exception:
             return False
