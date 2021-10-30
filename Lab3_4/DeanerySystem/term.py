@@ -1,15 +1,16 @@
-from day import Day
+from DeanerySystem.day import Day
+
 
 class Term(object):
 
-    def __init__(self, day, hour, minute):
+    def __init__(self, hour, minute, duration = 90, day = Day.MON):
         self.hour = hour
         self.minute = minute 
-        self.duration = 90
+        self.duration = duration
         self._day = day
 
     def __str__(self):
-        rep_day = { 1: "Poniedziałek",
+        day = {     1: "Poniedziałek",
                     2: "Wtorek",
                     3: "Środa",
                     4: "Czwartek",
@@ -17,23 +18,35 @@ class Term(object):
                     6: "Sobota",
                     7: "Niedziela",
         }[self._day.value]
-        return "{} {}:{} [{}]".format(rep_day, self.hour, "00" if self.minute == 0 else self.minute, self.duration)
+        return "{} {}:{} [{}]".format(day ,self.hour, "0"+str(self.minute) if self.minute >= 0 and self.minute <= 9 else self.minute, self.duration)
 
     def earlierThan(self, termin):
-        day_diff = self._day.difference(termin._day)
-        if day_diff > 0:
-            return True
-        elif day_diff == 0:
-            return False if termin.hour < self.hour else (False if termin.hour == self.hour and termin.minute < self.minute else True) 
-        return False
-
-    # Way easier to just negate this ^ func
-    def laterThan(self, termin):
-        return not self.earlierThan(termin)
+        return False if termin.hour < self.hour else (False if termin.hour == self.hour and termin.minute < self.minute else True) 
 
     def equals(self, termin):
-        return True if self._day.difference(termin._day) == 0 and self.hour == termin.hour and self.minute == termin.minute else False
+        return True if self.hour == termin.hour and self.minute == termin.minute and self.duration == termin.duration else False
     
+    def __lt__(self, termin):
+        return self.earlierThan(termin)
+
+    def __le__(self, termin):
+        return self.earlierThan(termin) or self.equals(termin)
+
+    def __gt__(self, termin):
+        return not self.earlierThan(termin)
+
+    def __ge__(self, termin):
+        return not self.earlierThan(termin) or self.equals(termin)
+
+    def __eq__(self, termin):
+        return self.equals(termin)
+
+    def __sub__(self, termin):
+        hour_d  = self.hour + self.duration // 60 - termin.hour
+        min_d   = self.minute + self.duration % 60 - termin.minute 
+        new_dur = hour_d*60 + min_d
+        return Term(termin.hour, termin.minute, new_dur)
+
     def getDay(self, day, month, year):
         offset = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
         week   = ['Sunday', 

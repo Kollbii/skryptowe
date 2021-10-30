@@ -1,0 +1,1 @@
+from DeanerySystem import day, lesson, term
