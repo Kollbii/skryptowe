@@ -2,7 +2,6 @@ from DeanerySystem.day import Day
 
 
 class Term(object):
-
     def __init__(self, hour, minute, duration = 90, day = Day.MON):
         self._hour = hour
         self._minute = minute 
