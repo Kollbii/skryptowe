@@ -40,8 +40,6 @@ class Term(object):
     def setDay(self, day):
         self._day = day
 
-
-
     def __str__(self):
         day = {     1: "Poniedziałek",
                     2: "Wtorek",
@@ -152,3 +150,19 @@ class Term(object):
             return False
         else:
             return True
+
+    def getEndTime(self):
+        hour_d = self._duration // 60
+        min_d = self._duration % 60
+
+        new_h = self._hour + hour_d
+        new_m = self._minute + min_d
+
+        if new_m > 60:
+            new_h += 1
+            new_m -= 60
+        
+        return str(new_h), "0"+str(new_m) if new_m < 10 else str(new_m)
+
+    def getStartTime(self):
+        return str(self._hour), "0"+str(self._minute) if self._minute < 10 else str(self._minute)

@@ -16,6 +16,7 @@ class Timetable1(object):
             return False
         
         if full_time and term.day.value in [1,2,3,4]:
+            # print("Is checking")
             if term.hour >= 8 and term.hour <= 20:
                 return True
         elif full_time and term.day.value in [5]:
@@ -29,14 +30,12 @@ class Timetable1(object):
                 return True
         return False
 
-
     def busy(self, term: Term) -> bool:
         for lesson in self._lessons:
             if lesson.term == term:
                 return True
             else:
                 return False
-
 
     def put(self, lesson: Lesson) -> bool:
         True if self._lessons.append(lesson) else False
@@ -67,7 +66,6 @@ class Timetable1(object):
             elif action == Action.TIME_LATER:
                 self._lessons[index % len_les].laterTime()
 
-
     def get(self, term: Term) -> Lesson:
         for lesson in self._lessons:
             if lesson.term == term:
@@ -75,7 +73,44 @@ class Timetable1(object):
         return None
 
     def __str__(self):
-        string = ""
+        tabl = f'{"": <12}{"Poniedziałek": <12}{"*Wtorek": <12}{"*Środa": <12}{"*Czwartek": <12}{"*Piątek": <12}{"*Sobota": <12}{"*Niedziela": <12}\n'      
+        tabl += f'{"": <12}{"*"*85}\n'
+        
+        times = []
         for lesson in self._lessons:
-            string += ''.join(str(lesson.name)+" --> "+str(lesson.term) + "\n")
-        return string
+            times.append(lesson.term)
+        times = sorted(times, key=lambda x: x.hour)
+
+        to_display = [[f'{"*": <12}' for x in range(7)] for y in range(len(times))]
+
+        prev_hour = []
+        for i in range(len(times)):
+            if [times[i].hour, times[i].minute, times[i].duration] != prev_hour:
+                prev_hour = [times[i].hour, times[i].minute, times[i].duration]
+                
+                end_hour, end_min = times[i].getEndTime()
+                start_hour, start_min = times[i].getStartTime()
+
+                start = f'{start_hour}:{start_min}'
+                end = f'{end_hour}:{end_min}'
+                
+                to_display[i][0] = f'{start+"-"+end: ^12}'
+
+                for lesson in self._lessons:
+                    if lesson.term.hour == times[i].hour and lesson.term.minute == times[i].minute and lesson.term.duration == times[i].duration:
+                        day = lesson.term.day.value
+                        # Option with centering
+                        
+                        # to_display[i][day] = "*"
+                        # to_display[i][day] += f'{lesson.name: ^12}'
+                        
+                        # Default
+                        to_display[i][day] += f'{"*"+lesson.name: <12}'
+
+        for i in range(len(to_display)):
+            for j in range(len(to_display[i])):
+                tabl += f'{to_display[i][j]}'
+            tabl += f'*\n{" ": <12}'
+            tabl += f'{"*"*85}\n'
+
+        return tabl

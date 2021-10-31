@@ -4,7 +4,6 @@ from DeanerySystem.term import Term
 
 
 class Lesson(object):
-    
     def __init__(self, timetable ,term: Term, name: str, teacher_name: str, year: int, full_time :bool = True):
         self._timetable = timetable
         self._term = term
@@ -73,7 +72,6 @@ class Lesson(object):
             # print("Przesunięcie w tył nie jest możliwe")
             return False
 
-
     def laterDay(self):
         new_day = Day(1 if self._term._day.value + 1 == 8 else self._term._day.value + 1)
         new_term = Term(self._term._hour, self._term._minute, self._term._duration, new_day)
@@ -105,7 +103,6 @@ class Lesson(object):
             # print("Przesunięcie terminu do tyłu nie jest możliwe")
             return False        
 
-
     def laterTime(self):
         hour_d = self._term._duration // 60
         min_d = self._term._duration % 60
@@ -127,5 +124,4 @@ class Lesson(object):
             return False        
 
     def __str__(self):
-        #TODO Change printing
         return "{} ({})\n{} rok studiów {}\nProwadzący: {}".format(self._name, self._term, self._year, "stacjonarnych" if self._full_time else "niestacjonarnych", self._teacher_name)
