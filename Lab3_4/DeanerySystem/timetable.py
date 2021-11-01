@@ -1,7 +1,6 @@
 from DeanerySystem.term import Term
 from DeanerySystem.lesson import Lesson
 from DeanerySystem.action import Action
-from DeanerySystem.day import Day
 from typing import List
 
 
@@ -12,11 +11,9 @@ class Timetable1(object):
         
     def can_be_transferred_to(self, term: Term, full_time: bool) -> bool:
         if self.busy(term):
-            print("Termin zajęty")
             return False
         
         if full_time and term.day.value in [1,2,3,4]:
-            # print("Is checking")
             if term.hour >= 8 and term.hour <= 20:
                 return True
         elif full_time and term.day.value in [5]:
@@ -34,8 +31,7 @@ class Timetable1(object):
         for lesson in self._lessons:
             if lesson.term == term:
                 return True
-            else:
-                return False
+        return False
 
     def put(self, lesson: Lesson) -> bool:
         True if self._lessons.append(lesson) else False
@@ -52,7 +48,6 @@ class Timetable1(object):
             elif opt == "t+":
                 A.append(Action.TIME_LATER)
         return A
-
 
     def perform(self, actions: List[Action]):
         len_les = len(self._lessons)
@@ -105,7 +100,7 @@ class Timetable1(object):
                         # to_display[i][day] += f'{lesson.name: ^12}'
                         
                         # Default
-                        to_display[i][day] += f'{"*"+lesson.name: <12}'
+                        to_display[i][day -1] += f'{"*"+lesson.name: <12}'
 
         for i in range(len(to_display)):
             for j in range(len(to_display[i])):

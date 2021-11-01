@@ -1,6 +1,5 @@
 from DeanerySystem.day import Day
 from DeanerySystem.term import Term
-# from DeanerySystem.timetable import Timetable1
 
 
 class Lesson(object):
@@ -69,7 +68,6 @@ class Lesson(object):
             self._term._day = new_day
             return True
         else:
-            # print("Przesunięcie w tył nie jest możliwe")
             return False
 
     def laterDay(self):
@@ -80,7 +78,6 @@ class Lesson(object):
             self._term._day = new_day
             return True
         else:
-            # print("Przesunięcie w przód nie jest możliwe")
             return False
 
     def earlierTime(self):
@@ -100,7 +97,6 @@ class Lesson(object):
             self._term._minute = new_min
             return True
         else:
-            # print("Przesunięcie terminu do tyłu nie jest możliwe")
             return False        
 
     def laterTime(self):
@@ -120,7 +116,6 @@ class Lesson(object):
             self._term._minute = new_min
             return True
         else:
-            # print("Przesunięcie terminu do przodu nie jest możliwe")
             return False        
 
     def __str__(self):

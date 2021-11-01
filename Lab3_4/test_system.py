@@ -1,19 +1,21 @@
 import unittest
-from DeanerySystem import Day
+from DeanerySystem import Day, timetable
 from DeanerySystem import Term
 from DeanerySystem import Lesson
 from DeanerySystem import Timetable1
+from DeanerySystem import Action
+
 
 class Test_DSystem(unittest.TestCase):
     def setUp(self):
-        global term1, term2, term3, term4, lesson1, lesson2, lesson3, lesson4
+        global term1, term2, term3, term4, lesson1, lesson2, lesson3, lesson4, actions, table
         term1 = Term(9, 45, 90, Day.TUE)
         term2 = Term(11, 15, 30, Day.WED)
         term3 = Term(11, 15, 90,Day.TUE)
         term4 = Term(17, 30, 110, Day.FRI)
     
         table = Timetable1()
-    
+        actions = ["t-", "d-", "t+", "d-", "kods-"]
         lesson1 = Lesson(table, term1, "Algebra", "Wokulski Tadeusz", 2)
         lesson2 = Lesson(table, term4, "Sledcza", "Fabrowski Marcin", 3, False)
         lesson3 = Lesson(table, term3, "WF", "Stojkowski Goste", 2)
@@ -69,4 +71,14 @@ class Test_DSystem(unittest.TestCase):
         self.assertEqual(term1 >= term3, False)
         self.assertEqual(term2 == term2, True)
         self.assertEqual(term2 == term3, False)
-        self.assertEqual(term3 - term1, Term(8, 15, 270, Day.MON))
+        self.assertEqual(term3 - term1, Term(9, 45, 180, Day.TUE))
+
+    def test_parse(self):
+        for action in table.parse(actions):
+            self.assertIn(action, [Action.TIME_EARLIER, Action.DAY_EARLIER, Action.TIME_LATER, Action.DAY_EARLIER])
+
+    def test_busy(self):
+        self.assertEqual(table.busy(lesson1), False)
+        self.assertEqual(table.busy(lesson2), False)
+        self.assertEqual(table.busy(lesson3), False)
+        self.assertEqual(table.busy(lesson4), False)

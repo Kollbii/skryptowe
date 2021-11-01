@@ -73,10 +73,10 @@ class Term(object):
         return self.equals(termin)
 
     def __sub__(self, termin):
-        hour_d  = self._hour + self._duration // 60 - termin._hour
+        hour_d  = self._hour + (self._duration // 60) - termin._hour
         min_d   = self._minute + self._duration % 60 - termin._minute 
         new_dur = hour_d*60 + min_d
-        return Term(termin._hour, termin._minute, new_dur)
+        return Term(termin.hour, termin.minute, new_dur, termin.day)
 
     def getDay(self, day, month, year):
         offset = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -96,7 +96,6 @@ class Term(object):
         dayOfWeek += offset[month - 1] + (day - 1)               
         dayOfWeek %= 7
         return int(dayOfWeek)
-
 
     # "27 X 2021 8:10 - 27 X 2021 8:30"
     def unpackDate(self, napis):
