@@ -9,8 +9,9 @@ term3 = Term(11, 15, 90, Day.TUE)
 term4 = Term(17, 30, 110, Day.FRI)
 
 table = Timetable1()
-
-lesson1 = Lesson(table, term1, "Algebra", "Wokulski Tadeusz", 2)
+tables = 's'
+print(type(tables) == Timetable1)
+lesson1 = Lesson(tables, term1, "Algebra", "Wokulski Tadeusz", 2)
 lesson2 = Lesson(table, term2, "Sledcza", "Fabrowski Marcin", 3)
 lesson3 = Lesson(table, term4, "WF", "Stojkowski Goste", 2,False)
 

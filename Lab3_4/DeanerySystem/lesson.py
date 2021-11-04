@@ -1,9 +1,10 @@
 from DeanerySystem.day import Day
 from DeanerySystem.term import Term
 
-
 class Lesson(object):
-    def __init__(self, timetable ,term: Term, name: str, teacher_name: str, year: int, full_time :bool = True):
+    def __init__(self, timetable, term: Term, name: str, teacher_name: str, year: int, full_time: bool = True):
+        from DeanerySystem.timetable import Timetable1
+        if not type(timetable) == Timetable1: raise Exception("Timetable must be type of `Timetable1`.")
         self._timetable = timetable
         self._term = term
         self._name = name
