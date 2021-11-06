@@ -1,6 +1,7 @@
 from DeanerySystem.term import Term
 from DeanerySystem.lesson import Lesson
 from DeanerySystem.action import Action
+from DeanerySystem.teacher import Teacher
 from typing import List
 
 
@@ -28,8 +29,11 @@ class Timetable1(object):
         return False
 
     def busy(self, term: Term) -> bool:
+        #TODO nachodzace terminy
         for lesson in self._lessons:
             if lesson.term == term:
+                return True
+            if lesson.term.hour == term.hour and (lesson.term.minute >= term.minute):
                 return True
         return False
 
@@ -66,6 +70,15 @@ class Timetable1(object):
             if lesson.term == term:
                 return lesson
         return None
+
+    def getTotalHours(self, teacher):
+        m_dur = 0
+        h_dur = 0
+        for lesson in self._lessons:
+            if lesson.teacher == teacher:
+                h_dur += lesson.term.duration // 45 
+                m_dur += lesson.term.duration % 45
+        return h_dur*45 + m_dur
 
     def __str__(self):
         tabl = f'{"": <12}{"Poniedziałek": <12}{"*Wtorek": <12}{"*Środa": <12}{"*Czwartek": <12}{"*Piątek": <12}{"*Sobota": <12}{"*Niedziela": <12}\n'      

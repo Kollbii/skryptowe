@@ -1,16 +1,30 @@
 from DeanerySystem.day import Day
 from DeanerySystem.term import Term
+from DeanerySystem.teacher import Teacher
+
 
 class Lesson(object):
-    def __init__(self, timetable, term: Term, name: str, teacher_name: str, year: int, full_time: bool = True):
+    def __init__(self, timetable, term: Term, name: str, teacher: Teacher, year: int, full_time: bool = True):
         from DeanerySystem.timetable import Timetable1
         if not type(timetable) == Timetable1: raise Exception("Timetable must be type of `Timetable1`.")
         self._timetable = timetable
         self._term = term
         self._name = name
-        self._teacher_name = teacher_name
         self._year = year
         self._full_time = full_time
+        self.__teacher = teacher
+
+    @property
+    def teacher(self):
+        return self.__teacher
+
+    @teacher.setter
+    def setTeacher(self, value):
+        self.__teacher = value
+
+    @teacher.deleter
+    def delTeacher(self):
+        self.__teacher = None
 
     #TODO Do better validation
     @property
@@ -117,7 +131,21 @@ class Lesson(object):
             self._term._minute = new_min
             return True
         else:
-            return False        
+            return False
+
+    def __add__(self, teacher):
+        if type(teacher) == Teacher:
+            total_time = self._timetable.getTotalHours(teacher) + (self.term.duration // 45)*45 + (self.term.duration % 45)
+            if total_time <= 6*45:
+                self.__teacher = teacher
+                return True
+        return False
+
+    def __sub__(self, teacher):
+        if type(teacher) == Teacher and teacher.id == self.teacher.id:
+            self.__teacher = Teacher(None, None)
+            return True
+        return False
 
     def __str__(self):
-        return "{} ({})\n{} rok studiów {}\nProwadzący: {}".format(self._name, self._term, self._year, "stacjonarnych" if self._full_time else "niestacjonarnych", self._teacher_name)
+        return "{} ({})\n{} rok studiów {}\nProwadzący: {} {}".format(self._name, self._term, self._year, "stacjonarnych" if self._full_time else "niestacjonarnych", self.teacher.imie, self.teacher.nazwisko)
