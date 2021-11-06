@@ -1,8 +1,7 @@
 # Programowanie Skryptowe - Laboratoria sem. zima
 
-### Lab 1 - 5
-    Python, DeanerySystem, unittests
-### Lab 6
+### Lab 1 - 6
+    Python, DeanerySystem, unittests, inheritance
 
 ### Lab 7
 
