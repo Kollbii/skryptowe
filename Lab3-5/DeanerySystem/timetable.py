@@ -9,7 +9,7 @@ class Timetable1(BaseTimetable):
     def can_be_transferred_to(self, term: Term, full_time: bool) -> bool:
         if self.busy(term):
             return False
-        
+            
         if full_time and term.day.value in [1,2,3,4]:
             if term.hour >= 8 and term.hour <= 20:
                 return True

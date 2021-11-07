@@ -1,10 +1,12 @@
 from DeanerySystem.term import Term
 from DeanerySystem.base_timetable import BaseTimetable
 from DeanerySystem.break1 import Break
+from DeanerySystem.timetable import Timetable1
 from typing import List
 
 
-class Timetable2(BaseTimetable):
+class Timetable2(Timetable1):
+    skipBreaks: bool = True
     def __init__(self, breaks: List[Break]):
         super().__init__()
         self._breaks = breaks
@@ -16,9 +18,42 @@ class Timetable2(BaseTimetable):
     @breaks.setter
     def setBreaks(self, value):
         self._breaks.append(value)
+    
+    def onBreak(self, term):
+        for br in self._breaks:
+            end_h_br, end_m_br = br.getEndTime()
+            start_h_br, start_m_br = br.getStartTime()
+            start_h_term, start_m_term = term.getStartTime()
+            end_h_term, end_m_term = term.getEndTime()
+            
+            if (int(end_h_br), int(end_m_br)) > (int(start_h_term), int(start_m_term)):
+                return True, br.duration
+
+            if (int(end_h_term), int(end_m_term)) > (int(start_h_br), int(start_m_br)):
+                return True, br.duration
         
+        return False,
+
     def can_be_transferred_to(self, term: Term, full_time: bool) -> bool:
-        print("Implement can be transfered to breaks")
+        if self.busy(term):
+            return False
+            
+        if full_time and term.day.value in [1,2,3,4]:
+            if term.hour >= 8 and term.hour <= 20:
+                return True
+        elif full_time and term.day.value in [5]:
+            if term.hour >= 8 and term.hour <= 17:
+                return True
+        elif not full_time and term.day.value in [5]:
+            if term.hour >= 17 and term.hour <= 20:
+                return True
+        elif not full_time and term.day.value in [6,7]:
+            if term.hour >= 8 and term.hour <= 20:
+                return True
+        return False
+
+    def updateLessons(self, timetable):
+        self._lessons = timetable.lessons
 
     def __str__(self):
         tabl = f'{"": <12}{"Poniedziałek": <12}{"*Wtorek": <12}{"*Środa": <12}{"*Czwartek": <12}{"*Piątek": <12}{"*Sobota": <12}{"*Niedziela": <12}\n'      
@@ -29,9 +64,8 @@ class Timetable2(BaseTimetable):
             times.append(lesson.term)
         for br in self._breaks:
             times.append(br)
-        print(times)
-        times = sorted(times, key=lambda x: x.hour or x.minute)
-        print(times)
+        times = sorted(times, key=lambda x: x.getUniqueStartingHours())
+
         to_display = [[f'{"*": <12}' for x in range(8)] for y in range(len(times))]
 
         prev_hour = []
@@ -41,7 +75,7 @@ class Timetable2(BaseTimetable):
         for i in range(len(times)):
             if [times[i].hour, times[i].minute, times[i].duration] != prev_hour:
                 prev_hour = [times[i].hour, times[i].minute, times[i].duration]
-                
+
                 end_hour, end_min = times[i].getEndTime()
                 start_hour, start_min = times[i].getStartTime()
 
@@ -50,16 +84,15 @@ class Timetable2(BaseTimetable):
                 
                 to_display[i-count][0] = f'{start+"-"+end: <12}'
 
-                for lesson in self._lessons:
-                    if lesson.term.hour == times[i].hour and lesson.term.minute == times[i].minute and lesson.term.duration == times[i].duration:
-                        day = lesson.term.day.value
-                        # Option with centering
-                        
-                        # to_display[i][day] = "*"
-                        # to_display[i][day] += f'{lesson.name: ^12}'
-                        
-                        # Default
-                        to_display[i - count][day] = f'{"*"+lesson.name: <12}'
+                if type(times[i]) == Break:
+                    for j in range(7):
+                        to_display[i-count][j+1] = f'{"-"*12}'
+                
+                if type(times[i]) == Term:
+                    for lesson in self._lessons:
+                        if lesson.term.hour == times[i].hour and lesson.term.minute == times[i].minute and lesson.term.duration == times[i].duration:
+                            day = lesson.term.day.value
+                            to_display[i - count][day] = f'{"*"+lesson.name: <12}'
             else:
                 count += 1
 

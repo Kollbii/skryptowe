@@ -44,10 +44,6 @@ class Test_DSystem(unittest.TestCase):
         self.assertEqual(term3.setTerm("28 X 2021 12:20 - 28 X 2021 14:20"), True)
 
     #Unit test for lab 4
-    # def test_lesson_represent(self):
-    #     self.assertEqual(lesson1.__str__(), "Algebra (Wtorek 9:45 [90])\n2 rok studiów stacjonarnych\nProwadzący: Wokulski Tadeusz")
-    #     self.assertEqual(lesson2.__str__(), "Sledcza (Piątek 17:30 [110])\n3 rok studiów niestacjonarnych\nProwadzący: Fabrowski Marcin")
-
     def test_earlier_day(self):
         self.assertEqual(lesson1.earlierDay(), True)
         self.assertEqual(lesson1.earlierDay(), False)

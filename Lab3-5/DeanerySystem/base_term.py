@@ -35,7 +35,7 @@ class BaseTerm(object):
         new_h = self._hour + hour_d
         new_m = self._minute + min_d
 
-        if new_m > 60:
+        if new_m >= 60:
             new_h += 1
             new_m -= 60
         

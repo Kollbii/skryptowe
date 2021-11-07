@@ -5,8 +5,8 @@ from DeanerySystem.teacher import Teacher
 
 class Lesson(object):
     def __init__(self, timetable, term: Term, name: str, teacher: Teacher, year: int, full_time: bool = True):
-        from DeanerySystem.timetable import Timetable1
-        if not type(timetable) == Timetable1: raise Exception("Timetable must be type of `Timetable1`.")
+        from DeanerySystem.timetable2 import Timetable2
+        if not type(timetable) == Timetable2: raise Exception("Timetable must be type of `Timetable1`.")
         self._timetable = timetable
         self._term = term
         self._name = name
@@ -107,6 +107,15 @@ class Lesson(object):
         
         new_term = Term(new_hour, new_min, self._term._duration, self._term._day)
 
+        isOnBreak = self.timetable.onBreak(new_term)
+
+        if isOnBreak[0]:
+            new_min -=  isOnBreak[1]
+            if new_min < 0:
+                new_hour -= 1
+                new_min = 60 + new_min
+            new_term = Term(new_hour, new_min, self._term._duration, self._term._day)
+
         if self._timetable.can_be_transferred_to(new_term, self._full_time):
             self._term._hour = new_hour
             self._term._minute = new_min
@@ -120,11 +129,24 @@ class Lesson(object):
 
         new_hour = self._term._hour + hour_d
         new_min = self._term._minute + min_d
-        if new_min > 60:
+        if new_min >= 60:
             new_hour += 1
             new_min = new_min - 60
 
         new_term = Term(new_hour, new_min, self._term._duration, self._term._day)
+
+        isOnBreak = self.timetable.onBreak(new_term)
+
+        if isOnBreak[0] and not self.timetable.skipBreaks:
+            print("self.skipBreaks is set to False. Can't move lesson")
+            return False
+
+        if isOnBreak[0]:
+            new_min += isOnBreak[1]
+            if new_min >= 60:
+                new_hour += 1
+                new_min = new_min - 60
+            new_term = Term(new_hour, new_min, self._term._duration, self._term._day)
 
         if self._timetable.can_be_transferred_to(new_term, self._full_time):
             self._term._hour = new_hour

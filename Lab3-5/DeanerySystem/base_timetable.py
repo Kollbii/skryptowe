@@ -10,13 +10,32 @@ class BaseTimetable(object):
     def __init__(self):
         self._lessons = []
 
+    @property
+    def lessons(self):
+        return self._lessons
+
+    @lessons.setter
+    def setLessons(self, value):
+        self._lessons = value
+
     def busy(self, term: Term) -> bool:
-        #TODO nachodzace terminy
         for lesson in self._lessons:
             if lesson.term == term:
                 return True
-            if lesson.term.hour == term.hour and (lesson.term.minute >= term.minute):
-                return True
+
+            if lesson.term.day == term.day:
+                end_h_les, end_m_les = lesson.term.getEndTime()
+                start_h_les, start_m_les = lesson.term.getStartTime()
+
+                start_h_term, start_m_term = term.getStartTime()
+                end_h_term, end_m_term = term.getEndTime()
+
+                # print((start_h_les, start_m_les), (end_h_les, end_m_les))
+                # print((start_h_term, start_m_term), (end_h_term, end_m_term))
+                #   WARNING!!
+                if int(end_h_les) == int(end_h_term) and int(end_m_les) > int(end_m_term):
+                    return True
+
         return False
 
     def put(self, lesson: Lesson) -> bool:
@@ -92,12 +111,6 @@ class BaseTimetable(object):
                 for lesson in self._lessons:
                     if lesson.term.hour == times[i].hour and lesson.term.minute == times[i].minute and lesson.term.duration == times[i].duration:
                         day = lesson.term.day.value
-                        # Option with centering
-                        
-                        # to_display[i][day] = "*"
-                        # to_display[i][day] += f'{lesson.name: ^12}'
-                        
-                        # Default
                         to_display[i - count][day] = f'{"*"+lesson.name: <12}'
             else:
                 count += 1
