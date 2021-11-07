@@ -10,7 +10,7 @@ from DeanerySystem.timetable2 import Timetable2
 
 class Test_DSystem(unittest.TestCase):
     def setUp(self):
-        global term1, term2, term3, term4, lesson1, lesson2, lesson3, lesson4
+        global term1, term2, term3, term4, lesson1, lesson2, lesson3, lesson4, lesson5
         global b1, b2, b3, b4, t1, t2, t3, act, actions, table
                 
         term1 = Term(8, 0, 90, Day.TUE)
@@ -29,13 +29,14 @@ class Test_DSystem(unittest.TestCase):
         t2 = Teacher("Kamila", "Goste")
         t3 = Teacher("Tadeusz", "Wokulski")
 
-        actions = ["t+", "t-", "t+", "d-", "kods-"]
+        actions = ["t+", "t-", "t+", "d-"]
         act = table.parse(actions)
 
         lesson1 = Lesson(table, term1, "Algebra", t1, 2)
         lesson2 = Lesson(table, term2, "Sledcza", t1, 3)
         lesson3 = Lesson(table, term3, "WF", t2, 2, False)
         lesson4 = Lesson(table, term4, "Skryptowe", t2, 2)
+        lesson5 = Lesson(table, term4, "Skryptowe", t2, 2)
 
         table.put(lesson1)
         table.put(lesson2)
@@ -77,5 +78,14 @@ class Test_DSystem(unittest.TestCase):
         self.assertFalse(lesson3.earlierDay())
         self.assertTrue(lesson3.laterDay())
 
+    def test_raise_value_error_parse(self):
+        global actions
+        actions = ["t+", "t-", "t+", "d-", "kods-"]
+        with self.assertRaises(ValueError):
+            table.parse(actions)
+
+    def test_raise_add_lesson_on_busy_term(self):
+        with self.assertRaises(ValueError):
+            table.put(lesson5)
 
     

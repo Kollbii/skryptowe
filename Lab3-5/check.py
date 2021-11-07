@@ -23,18 +23,20 @@ t2 = Teacher("Kamila", "Goste")
 t3 = Teacher("Tadeusz", "Wokulski")
 
 # actions = ["d-", "t-", "t+", "d+", "kods-"]
-actions = ["t+", "t-", "t+", "d-", "kods-"]
+actions = ["t+", "t-", "t+", "d-"]
 act = btable.parse(actions)
 
 lesson1 = Lesson(btable, term1, "Algebra", t1, 2)
 lesson2 = Lesson(btable, term2, "Sledcza", t1, 3)
 lesson3 = Lesson(btable, term3, "WF", t2, 2, False)
 lesson4 = Lesson(btable, term4, "Skryptowe", t2, 2)
+lesson5 = Lesson(btable, term4, "Skryptowe", t2, 2)
 
 btable.put(lesson1)
 btable.put(lesson2)
 btable.put(lesson3)
 btable.put(lesson4)
+btable.put(lesson5)
 
 btable.updateLessons(btable)
 

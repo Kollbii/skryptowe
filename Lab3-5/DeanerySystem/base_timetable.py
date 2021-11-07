@@ -39,6 +39,9 @@ class BaseTimetable(object):
         return False
 
     def put(self, lesson: Lesson) -> bool:
+        if self.busy(lesson.term):
+            raise ValueError("This lesson term is busy")
+
         True if self._lessons.append(lesson) else False
 
     def parse(self, actions: List[str]) -> List[Action]:
@@ -52,6 +55,8 @@ class BaseTimetable(object):
                 A.append(Action.TIME_EARLIER)
             elif opt == "t+":
                 A.append(Action.TIME_LATER)
+            else:
+                raise ValueError("Translation `" + opt + "` is incorrect.")
         return A
 
     def perform(self, actions: List[Action]):
