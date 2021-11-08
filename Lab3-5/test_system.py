@@ -1,9 +1,9 @@
 import unittest
 from DeanerySystem import Day, timetable
-from DeanerySystem import Term
+from DeanerySystem import Term, BaseTerm, Break
 from DeanerySystem import Lesson
-from DeanerySystem import Timetable1
 from DeanerySystem import Action
+from DeanerySystem import Timetable2
 
 
 class Test_DSystem(unittest.TestCase):
@@ -13,8 +13,9 @@ class Test_DSystem(unittest.TestCase):
         term2 = Term(11, 15, 30, Day.WED)
         term3 = Term(11, 15, 90,Day.TUE)
         term4 = Term(17, 30, 110, Day.FRI)
-    
-        table = Timetable1()
+
+        br = Break(BaseTerm(9,30,5))
+        table = Timetable2([br])
         actions = ["t-", "d-", "t+", "d-", "kods-"]
         lesson1 = Lesson(table, term1, "Algebra", "Wokulski Tadeusz", 2)
         lesson2 = Lesson(table, term4, "Sledcza", "Fabrowski Marcin", 3, False)
@@ -71,8 +72,9 @@ class Test_DSystem(unittest.TestCase):
         self.assertEqual(term3 - term1, Term(9, 45, 180, Day.TUE))
 
     def test_parse(self):
-        for action in table.parse(actions):
-            self.assertIn(action, [Action.TIME_EARLIER, Action.DAY_EARLIER, Action.TIME_LATER, Action.DAY_EARLIER])
+        with self.assertRaises(ValueError):
+            for action in table.parse(actions):
+                self.assertIn(action, [Action.TIME_EARLIER, Action.DAY_EARLIER, Action.TIME_LATER, Action.DAY_EARLIER])
 
     def test_busy(self):
         self.assertEqual(table.busy(lesson1), False)

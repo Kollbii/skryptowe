@@ -6,7 +6,7 @@ from DeanerySystem.teacher import Teacher
 class Lesson(object):
     def __init__(self, timetable, term: Term, name: str, teacher: Teacher, year: int, full_time: bool = True):
         from DeanerySystem.timetable2 import Timetable2
-        if not type(timetable) == Timetable2: raise Exception("Timetable must be type of `Timetable1`.")
+        if not type(timetable) == Timetable2: raise Exception("Timetable must be type of `Timetable2`.")
         self._timetable = timetable
         self._term = term
         self._name = name

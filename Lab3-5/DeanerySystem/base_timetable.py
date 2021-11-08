@@ -42,7 +42,7 @@ class BaseTimetable(object):
         if self.busy(lesson.term):
             raise ValueError("This lesson term is busy")
 
-        True if self._lessons.append(lesson) else False
+        return True if self._lessons.append(lesson) else False
 
     def parse(self, actions: List[str]) -> List[Action]:
         A = []

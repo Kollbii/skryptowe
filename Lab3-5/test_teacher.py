@@ -1,19 +1,23 @@
 import unittest
 from DeanerySystem.term import Term
+from DeanerySystem.base_term import BaseTerm
 from DeanerySystem.day import Day
 from DeanerySystem.lesson import Lesson
-from DeanerySystem.timetable import Timetable1
+from DeanerySystem.timetable2 import Timetable2
 from DeanerySystem.teacher import Teacher
+from DeanerySystem.break1 import Break
 
 
 class Test_TestDay(unittest.TestCase):
     def setUp(self):
-        global term1, term2, term3, table, t1, t2, lesson1, lesson2, lesson3, t3
+        global term1, term2, term3, table, t1, t2, lesson1, lesson2, lesson3, t3, br
         term1 = Term(9, 45, 90, Day.TUE)
         term2 = Term(11, 15, 90, Day.WED)
         term3 = Term(17, 30, 110, Day.FRI)
 
-        table = Timetable1()
+        br = Break(BaseTerm(9,30,5))
+
+        table = Timetable2([br])
 
         t1 = Teacher("Tadeusz", "Wokulski")
         t2 = Teacher("Kamila", "Goste")
