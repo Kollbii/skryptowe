@@ -2,7 +2,7 @@ from uuid import uuid4
 
 
 class Teacher(object):
-    def __init__(self, imie = None, nazwisko = None):
+    def __init__(self, imie :str = None, nazwisko: str = None):
         self.id = uuid4()
         self.imie = imie
         self.nazwisko = nazwisko

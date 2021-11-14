@@ -1,3 +1,4 @@
+from typing import List
 from DeanerySystem.day import Day
 from DeanerySystem.base_term import BaseTerm
 
@@ -12,7 +13,7 @@ class Term(BaseTerm):
         return self._day
 
     @day.setter
-    def setDay(self, day):
+    def setDay(self, day: Day):
         self._day = day
 
     def __str__(self):
@@ -32,7 +33,7 @@ class Term(BaseTerm):
         new_dur = hour_d*60 + min_d
         return Term(termin.hour, termin.minute, new_dur, termin.day)
 
-    def getDay(self, day, month, year):
+    def getDay(self, day, month, year) -> int:
         offset = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
         week   = ['Sunday', 
                 'Monday', 
@@ -51,7 +52,7 @@ class Term(BaseTerm):
         dayOfWeek %= 7
         return int(dayOfWeek)
 
-    def unpackDate(self, napis):
+    def unpackDate(self, napis: str) -> List[List]:
         # "27 X 2021 8:10 - 27 X 2021 8:30"
         data = [napis.strip() for napis in napis.split(" ")]
         months = {'I':1, "II":2, "III":3, "IV":4, "V":5, "VI":6, "VII":7, "VIII":8, "IX":9, "X":10, "XI":11, "XII":12}
@@ -74,7 +75,7 @@ class Term(BaseTerm):
         #TODO Check if valid date
         return [[day1, month1, year1, hour1, min1], [day2, month2, year2, hour2, min2]]
 
-    def setTerm(self, napis):
+    def setTerm(self, napis: str) -> bool:
         data = self.unpackDate(napis)
 
         year_d  = data[1][2] - data[0][2]

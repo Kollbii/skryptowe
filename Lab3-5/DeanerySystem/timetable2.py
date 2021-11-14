@@ -16,44 +16,57 @@ class Timetable2(Timetable1):
         return self._breaks
     
     @breaks.setter
-    def setBreaks(self, value):
+    def setBreaks(self, value: Break):
         self._breaks.append(value)
     
-    def onBreak(self, term):
+    def onBreak(self, term: Term):
+        start_t = (int(term.getStartTime()[0]), int(term.getStartTime()[1]))
+        end_t = (int(term.getEndTime()[0]), int(term.getEndTime()[1]))
+
         for br in self._breaks:
-            end_h_br, end_m_br = br.getEndTime()
-            start_h_br, start_m_br = br.getStartTime()
-            start_h_term, start_m_term = term.getStartTime()
-            end_h_term, end_m_term = term.getEndTime()
-            
-            if (int(end_h_br), int(end_m_br)) > (int(start_h_term), int(start_m_term)):
+            start_b = (int(br.getStartTime()[0]), int(br.getStartTime()[1]))
+            end_b = (int(br.getEndTime()[0]), int(br.getEndTime()[1]))
+            if end_b > start_t and start_t > start_b:
                 return True, br.duration
 
-            if (int(end_h_term), int(end_m_term)) > (int(start_h_br), int(start_m_br)):
+            if end_t > start_b and end_b > end_t:
                 return True, br.duration
-        
+
+            if start_t == start_b and end_t > end_b:
+                return True, br.duration
+
+            if end_b == end_t and start_b > start_t:
+                return True, br.duration
+
+            if start_t < start_b and end_t > end_b:
+                return True, br.duration
+
         return False,
 
-    def updateLessons(self, timetable):
-        self._lessons = timetable.lessons
+    def busy(self, term: Term) -> bool:
+        start_t = (int(term.getStartTime()[0]), int(term.getStartTime()[1]))
+        end_t = (int(term.getEndTime()[0]), int(term.getEndTime()[1]))
 
-    #TODO
-    # def busy(self, term: Term) -> bool:
-    #     pass
+        for lessson in list(self._lessons.values()):
+            if term.day == lessson.term.day:
 
-    # def put(self, lesson: Lesson) -> bool:
-    #     if type(lesson) == Lesson:
-    #         for le in list(self._lessons.values()):
-    #             if le.term == lesson.term:
-    #                 raise ValueError("Term is busy!")
+                start_l = (int(lessson.term.getStartTime()[0]), int(lessson.term.getStartTime()[1]))
+                end_l = (int(lessson.term.getEndTime()[0]), int(lessson.term.getEndTime()[1]))
 
-    #             #TODO Check if overlaps with breaks
-    #             if 1:
-    #                 pass
-    #             print(lesson.term)
+                if start_t > start_l and start_t < end_l:
+                    return True
+                if end_t > start_l and end_t < end_l:
+                    return True
+                if start_t == start_l:
+                    return True
+                if start_t < start_l and end_t > end_l:
+                    return True
+                if start_t > start_l and end_t < end_l:
+                    return True
+                if end_t == end_l:
+                    return True
 
-    #             return True
-    #     return False
+        return False
 
     def __str__(self):
         tabl = f'{"": <12}{"Poniedziałek": <12}{"*Wtorek": <12}{"*Środa": <12}{"*Czwartek": <12}{"*Piątek": <12}{"*Sobota": <12}{"*Niedziela": <12}\n'      
@@ -85,6 +98,7 @@ class Timetable2(Timetable1):
                 to_display[i-count][0] = f'{start+"-"+end: <12}'
 
                 if type(times[i]) == Break:
+                    # to_display[i-count][0] = f'{"Przerwa": <12}'
                     for j in range(7):
                         to_display[i-count][j+1] = f'{"-"*12}'
                 

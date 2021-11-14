@@ -11,21 +11,23 @@ from DeanerySystem.timetable2 import Timetable2
 class Test_DSystem(unittest.TestCase):
     def setUp(self):
         global term1, term2, term3, term4, term5, lesson1, lesson2, lesson3, lesson4, lesson5, lesson6
-        global b1, b2, b3, b4, t1, t2, t3, act, actions, table
+        global b1, b2, b3, b4, b5, b6, b7, t1, t2, t3, act, actions, table
                 
         term1 = Term(8, 0, 90, Day.TUE)
         term2 = Term(9, 35, 90, Day.WED)
         term3 = Term(17, 20, 110, Day.FRI)
         term4 = Term(9, 35, 90, Day.FRI)
-        term5 = Term(17, 20, 110, Day.SAT)
+        term5 = Term(17, 20, 120, Day.SAT)
 
 
         b1 = Break(BaseTerm(9, 30, 5))
         b2 = Break(BaseTerm(11, 5, 10))
-        # b3 = Break(BaseTerm(12, 45, 5))
-        # b4 = Break(BaseTerm(14, 20, 20))
+        b3 = Break(BaseTerm(12, 45, 5))
+        b4 = Break(BaseTerm(14, 20, 20))
+        b5 = Break(BaseTerm(16, 10, 5))
+        b7 = Break(BaseTerm(19, 20, 10))
 
-        table = Timetable2([b1,b2])
+        table = Timetable2([b1,b2,b3,b4,b5,b7])
 
         t1 = Teacher("Tadeusz", "Wokulski")
         t2 = Teacher("Kamila", "Goste")
@@ -39,7 +41,7 @@ class Test_DSystem(unittest.TestCase):
         lesson3 = Lesson(table, term3, "WF", t2, 2, False)
         lesson4 = Lesson(table, term4, "Skryptowe", t2, 2)
         lesson5 = Lesson(table, term4, "Skryptowe", t2, 2)
-        lesson6 = Lesson(table, term5, "InnePrzed", t2, 2, False)
+        lesson6 = Lesson(table, term5, "InnePrzed", t2, 1, False)
 
         table.put(lesson1)
         table.put(lesson2)
@@ -47,7 +49,6 @@ class Test_DSystem(unittest.TestCase):
         table.put(lesson4)
         table.put(lesson6)
 
-        # table.updateLessons(table)
         # print(table)
 
     '''
@@ -74,16 +75,12 @@ class Test_DSystem(unittest.TestCase):
         self.assertTrue(lesson2.earlierTime())
         self.assertFalse(lesson2.earlierTime())
 
-    def change_lesson3(self):
-        global lesson3
-        lesson3 = Lesson(table, Term(19, 20, 120, Day.FRI), "WF", t2, 2, False)
-
     def test_before_17(self):
         self.assertFalse(lesson3.earlierTime())
-        self.change_lesson3()
+        lesson3.setTerm = Term(19, 20, 90, Day.FRI)
         self.assertTrue(lesson3.earlierTime())
         self.assertFalse(lesson3.earlierDay())
-        self.assertTrue(lesson3.laterDay())
+        self.assertFalse(lesson3.laterDay())
 
     def test_raise_value_error_parse(self):
         global actions
@@ -95,4 +92,7 @@ class Test_DSystem(unittest.TestCase):
         with self.assertRaises(ValueError):
             table.put(lesson5)
 
+    def test_false_breaks(self):
+        table.skipBreaks = False
+        self.assertFalse(lesson3.laterTime())
     

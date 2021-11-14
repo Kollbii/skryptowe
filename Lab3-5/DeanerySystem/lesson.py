@@ -1,7 +1,7 @@
 from DeanerySystem.day import Day
 from DeanerySystem.term import Term
 from DeanerySystem.teacher import Teacher
-
+from DeanerySystem.lesson_exception import LessonError
 
 class Lesson(object):
     def __init__(self, timetable, term: Term, name: str, teacher: Teacher, year: int, full_time: bool = True):
@@ -20,19 +20,23 @@ class Lesson(object):
 
     @teacher.setter
     def setTeacher(self, value):
+        if type(value) != Teacher:
+            raise LessonError("Teacher must be Teacher type.")    
         self.__teacher = value
 
     @teacher.deleter
     def delTeacher(self):
         self.__teacher = None
 
-    #TODO Do better validation
     @property
     def timetable(self):
         return self._timetable
 
     @timetable.setter
     def setTimetable(self, timetable):
+        from DeanerySystem.timetable2 import Timetable2
+        if type(timetable) != Timetable2:
+            raise LessonError("Timetable must be Timetable2 type.")
         self._timetable = timetable
 
     @property
@@ -41,6 +45,8 @@ class Lesson(object):
 
     @term.setter
     def setTerm(self, term):
+        if type(term) != Term:
+            raise LessonError("Term must be Term type.")
         self._term = term
 
     @property
@@ -49,6 +55,8 @@ class Lesson(object):
 
     @name.setter
     def setName(self, name):
+        if type(name) != str:
+            raise LessonError("Name must be a string.")
         self._name = name
 
     @property
@@ -57,6 +65,8 @@ class Lesson(object):
 
     @teacherName.setter
     def setTeacherName(self, name):
+        if type(name) != str:
+            raise LessonError("Teacher name must be a string.")
         self._teacher_name = name
 
     @property
@@ -65,6 +75,8 @@ class Lesson(object):
 
     @year.setter
     def setYear(self, year):
+        if type(year) != int:
+            raise LessonError("Year mus be an intiger.")
         self._year = year
 
     @property
@@ -73,6 +85,8 @@ class Lesson(object):
 
     @fullTime.setter
     def setFullTime(self, full_time):
+        if type(full_time) != bool:
+            raise LessonError("Full_time property must be bool.")
         self._full_time = full_time
 
     def earlierDay(self):
