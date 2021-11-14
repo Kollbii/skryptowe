@@ -47,7 +47,7 @@ class Test_DSystem(unittest.TestCase):
         table.put(lesson4)
         table.put(lesson6)
 
-        table.updateLessons(table)
+        # table.updateLessons(table)
         # print(table)
 
     '''

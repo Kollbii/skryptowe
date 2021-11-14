@@ -12,14 +12,23 @@ class BaseTimetable(object):
     @property
     def lessons(self):
         return self._lessons
+    
+    @lessons.setter
+    def setLessons(self, lesson):
+        self._lessons[lesson.term] = lesson
+
+    def busy(self, term: Term) -> bool:
+        for le in list(self._lessons.values()):
+            if le.term == term:
+                return True
+        return False
 
     def put(self, lesson: Lesson) -> bool:
         if type(lesson) == Lesson:
-            for le in list(self._lessons.values()):
-                if le.term == lesson.term:
-                    raise ValueError("Term is busy!")
-                self._lessons[lesson.term] = lesson
-                return True
+            if self.busy(lesson.term):
+                raise ValueError("Term is busy!")
+            self._lessons[lesson.term.__str__()] = lesson
+            return True
         return False
 
     def parse(self, actions: List[str]) -> List[Action]:
@@ -58,7 +67,7 @@ class BaseTimetable(object):
     def getTotalHours(self, teacher):
         m_dur = 0
         h_dur = 0
-        for lesson in self._lessons:
+        for lesson in list(self._lessons.values()):
             if lesson.teacher == teacher:
                 h_dur += lesson.term.duration // 45 
                 m_dur += lesson.term.duration % 45

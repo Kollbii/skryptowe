@@ -5,10 +5,6 @@ from DeanerySystem.base_timetable import BaseTimetable
 class Timetable1(BaseTimetable):
     def __init__(self):
         super().__init__()
-        
-    #TODO
-    def busy(self, term: Term) -> bool:
-        return False
 
     def can_be_transferred_to(self, term: Term, full_time: bool) -> bool:
         if self.busy(term):

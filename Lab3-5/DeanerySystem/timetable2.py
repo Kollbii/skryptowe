@@ -38,23 +38,22 @@ class Timetable2(Timetable1):
         self._lessons = timetable.lessons
 
     #TODO
-    def busy(self, term: Term) -> bool:
-        return False
+    # def busy(self, term: Term) -> bool:
+    #     pass
 
-    def put(self, lesson: Lesson) -> bool:
-        if type(lesson) == Lesson:
-            for le in list(self._lessons.values()):
-                if le.term == lesson.term:
-                    raise ValueError("Term is busy!")
+    # def put(self, lesson: Lesson) -> bool:
+    #     if type(lesson) == Lesson:
+    #         for le in list(self._lessons.values()):
+    #             if le.term == lesson.term:
+    #                 raise ValueError("Term is busy!")
 
-                #TODO Check if overlaps with breaks
-                if 1:
-                    pass
-                print(lesson.term)
-                self._lessons[print(lesson.term)] = lesson
+    #             #TODO Check if overlaps with breaks
+    #             if 1:
+    #                 pass
+    #             print(lesson.term)
 
-                return True
-        return False
+    #             return True
+    #     return False
 
     def __str__(self):
         tabl = f'{"": <12}{"Poniedziałek": <12}{"*Wtorek": <12}{"*Środa": <12}{"*Czwartek": <12}{"*Piątek": <12}{"*Sobota": <12}{"*Niedziela": <12}\n'      

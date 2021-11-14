@@ -76,8 +76,9 @@ class Test_DSystem(unittest.TestCase):
             for action in table.parse(actions):
                 self.assertIn(action, [Action.TIME_EARLIER, Action.DAY_EARLIER, Action.TIME_LATER, Action.DAY_EARLIER])
 
-    def test_busy(self):
-        self.assertEqual(table.busy(lesson1), False)
-        self.assertEqual(table.busy(lesson2), False)
-        self.assertEqual(table.busy(lesson3), False)
-        self.assertEqual(table.busy(lesson4), False)
+    #TODO
+    # def test_busy(self):
+    #     self.assertEqual(table.busy(lesson1.term), False)
+    #     self.assertEqual(table.busy(lesson2.term), False)
+    #     self.assertEqual(table.busy(lesson3.term), False)
+    #     self.assertEqual(table.busy(lesson4.term), False)
