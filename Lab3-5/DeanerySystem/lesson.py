@@ -156,6 +156,8 @@ class Lesson(object):
             return False
 
     def __add__(self, teacher):
+        if self.teacher == teacher:
+            return False
         if type(teacher) == Teacher:
             total_time = self._timetable.getTotalHours(teacher) + (self.term.duration // 45)*45 + (self.term.duration % 45)
             if total_time <= 6*45:

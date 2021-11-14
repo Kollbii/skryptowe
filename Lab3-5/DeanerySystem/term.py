@@ -25,27 +25,6 @@ class Term(BaseTerm):
         }[self._day.value]
         return "{} {}:{} [{}]".format(day ,self._hour, "0"+str(self._minute) if self._minute >= 0 and self._minute <= 9 else self._minute, self._duration)
 
-    def earlierThan(self, termin):
-        return False if termin._hour < self._hour else (False if termin._hour == self._hour and termin._minute < self._minute else True) 
-
-    def equals(self, termin):
-        return True if self._day == termin._day and self._hour == termin._hour and self._minute == termin._minute and self._duration == termin._duration else False
-    
-    def __lt__(self, termin):
-        return self.earlierThan(termin)
-
-    def __le__(self, termin):
-        return self.earlierThan(termin) or self.equals(termin)
-
-    def __gt__(self, termin):
-        return not self.earlierThan(termin)
-
-    def __ge__(self, termin):
-        return not self.earlierThan(termin) or self.equals(termin)
-
-    def __eq__(self, termin):
-        return self.equals(termin)
-
     def __sub__(self, termin):
         hour_d  = self._hour + (self._duration // 60) - termin._hour
         min_d   = self._minute + self._duration % 60 - termin._minute 
@@ -71,8 +50,8 @@ class Term(BaseTerm):
         dayOfWeek %= 7
         return int(dayOfWeek)
 
-    # "27 X 2021 8:10 - 27 X 2021 8:30"
     def unpackDate(self, napis):
+        # "27 X 2021 8:10 - 27 X 2021 8:30"
         data = [napis.strip() for napis in napis.split(" ")]
         months = {'I':1, "II":2, "III":3, "IV":4, "V":5, "VI":6, "VII":7, "VIII":8, "IX":9, "X":10, "XI":11, "XII":12}
         

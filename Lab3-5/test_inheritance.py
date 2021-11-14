@@ -48,7 +48,7 @@ class Test_DSystem(unittest.TestCase):
         table.put(lesson6)
 
         table.updateLessons(table)
-        print(table)
+        # print(table)
 
     '''
     Wszystkie funkcje mają zapewniać poprawne działanie funkcji earlier*() oraz later*()
