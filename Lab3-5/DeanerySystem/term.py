@@ -1,6 +1,7 @@
 from DeanerySystem.day import Day
 from DeanerySystem.base_term import BaseTerm
 
+
 class Term(BaseTerm):
     def __init__(self, hour: int, minute: int, duration: int, day: Day = Day.MON):
         super().__init__(hour, minute, duration)

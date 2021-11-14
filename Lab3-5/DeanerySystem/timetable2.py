@@ -60,7 +60,7 @@ class Timetable2(Timetable1):
         tabl += f'{"": <12}{"*"*85}\n'
         
         times = []
-        for lesson in self._lessons:
+        for lesson in list(self._lessons.values()):
             times.append(lesson.term)
         for br in self._breaks:
             times.append(br)
@@ -89,7 +89,7 @@ class Timetable2(Timetable1):
                         to_display[i-count][j+1] = f'{"-"*12}'
                 
                 if type(times[i]) == Term:
-                    for lesson in self._lessons:
+                    for lesson in list(self._lessons.values()):
                         if lesson.term.hour == times[i].hour and lesson.term.minute == times[i].minute and lesson.term.duration == times[i].duration:
                             day = lesson.term.day.value
                             to_display[i - count][day] = f'{"*"+lesson.name: <12}'
