@@ -18,7 +18,7 @@ class Timetable2(Timetable1):
     @breaks.setter
     def setBreaks(self, value: Break):
         self._breaks.append(value)
-    
+
     def onBreak(self, term: Term):
         start_t = (int(term.getStartTime()[0]), int(term.getStartTime()[1]))
         end_t = (int(term.getEndTime()[0]), int(term.getEndTime()[1]))

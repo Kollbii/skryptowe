@@ -51,7 +51,7 @@ class Timetable1(BaseTimetable):
                 
                 to_display[i-count][0] = f'{start+"-"+end: <12}'
 
-                for lesson in self._lessons:
+                for lesson in list(self._lessons.values()):
                     if lesson.term.hour == times[i].hour and lesson.term.minute == times[i].minute and lesson.term.duration == times[i].duration:
                         day = lesson.term.day.value
                         to_display[i - count][day] = f'{"*"+lesson.name: <12}'
