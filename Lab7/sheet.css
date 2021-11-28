@@ -70,3 +70,27 @@ aside h1 {
     from {color: red;}
     to {color: blue;}
 }
+
+@media screen and (min-width: 100px) and (max-width: 390px) {
+    header {
+        width: 100%;
+    }
+	aside  {
+        clear: left;
+        float: left;
+        height: 200px;
+        width: 100%;
+        margin-bottom: 2%;
+    }
+    nav {
+        width: 100%;
+        padding: 0;
+    }
+    main {
+        width: 100%;
+    }
+    footer {
+        width: 100%;
+        padding: 0;
+    }
+}
