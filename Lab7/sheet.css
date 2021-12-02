@@ -1,12 +1,16 @@
 header {
     display: block;
     margin-bottom: 2%;
-    font-size: 1.2em;
+    font-size: calc(1 * (1.5vw));
 }
 
 h1, h2 {
     margin: 0;
     padding: 0.3rem;
+}
+
+aside h1, aside h2, main h1 {
+    font-size: calc(1.2 * (1.5vw));
 }
 
 nav {
@@ -34,11 +38,12 @@ main {
 footer {
     display: flex;
     clear: both;
-    padding: 1%;
+    font-size: calc(0.7 * (1.5vw));
+    padding: 0.5em;
 }
 
 li {
-    font-size: 1.2em;
+    font-size: calc(0.7 * (1.5vw));
 }
 
 blockquote {
@@ -46,6 +51,7 @@ blockquote {
 }
 
 p {
+    font-size: calc(0.7 * (1.5vw));
     padding: 0.5em;
 }
 
@@ -71,16 +77,25 @@ aside h1 {
     to {color: blue;}
 }
 
-@media screen and (min-width: 100px) and (max-width: 390px) {
+/* x-device-x  - urządzenie*/
+@media screen 
+and (min-device-width: 200px) 
+and (max-device-width: 800px){ 
+    header, aside, nav, main, footer {
+        clear: both;
+        float: left;
+    }
     header {
+        font-size: 6vw;
         width: 100%;
     }
 	aside  {
-        clear: left;
-        float: left;
         height: 200px;
         width: 100%;
         margin-bottom: 2%;
+    }
+    aside h1, aside h2 {
+        font-size: 5vw;
     }
     nav {
         width: 100%;
@@ -88,9 +103,22 @@ aside h1 {
     }
     main {
         width: 100%;
+        font-size: 4vw;
+    }
+    main h1{
+        font-size: 7vw;
+    }
+    p {
+        font-size: 4vw;
     }
     footer {
         width: 100%;
-        padding: 0;
+        padding: 0px;
+        font-size: 3vw;
+        padding: 0.5em;
+    }
+    li {
+        font-size: 4vw;
+        padding: 0.5em;
     }
 }
