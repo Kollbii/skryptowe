@@ -3,7 +3,7 @@ sara.py
 __pycache__/
 *.py[cod]
 *$py.class
-
+Lab10/node_modules/*
 # C extensions
 *.so
 
