@@ -1,11 +1,16 @@
+/*
+  Mocha allows you to use any assertion library you wish. In this example, we are using the built-in module called 'Assert'.
+  If you prefer the 'Chai' library (https://www.chaijs.com/) then you have to install it yourself: 'npm install chai --save-dev',
+  and then you need to uncomment the lines below.
+*/
+
 //----------------------------------------
 // Mocha tests with CommonJS style imports
 //----------------------------------------
 
 // var expect = require('chai').expect;
-/*
 var assert = require('assert');
-var module = require('../module.mjs');
+var module = require('../commonjs/module');
 
 describe('The sum() method', function () {
   it('Returns 4 for 2+2', function () {
@@ -19,7 +24,7 @@ describe('The sum() method', function () {
     // expect(op.sum()).to.equal(0);
   });
 });
-*/
+
 //-----------------------------------
 // Mocha tests with ES6 style imports
 //-----------------------------------
@@ -28,10 +33,8 @@ describe('The sum() method', function () {
 - You must install the 'esm' module (https://www.npmjs.com/package/esm) — npm install esm --save-dev
 - You must run tests as follows: npx mocha --require esm
 Source: https://stackoverflow.com/questions/57004631/mocha-tests-with-es6-style-imports
-*/
 
-// npx mocha test1.js <--WORKS FOR ME
-import { Operation } from "../module.mjs";
+import { Operation } from "../module";
 import assert from 'assert';
 
 describe('The sum() method', function () {
@@ -44,3 +47,4 @@ describe('The sum() method', function () {
     assert.strictEqual(op.sum(), 0)
   });
 });
+*/

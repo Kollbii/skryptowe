@@ -1,0 +1,5 @@
+Some values in here
+
+int main(void){
+    printf("some code in gere for %d times", 34);
+}
