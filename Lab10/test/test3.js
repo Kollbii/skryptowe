@@ -28,6 +28,11 @@ describe('GET /submit?name=testFile.txt', function (){
         server
             .get('/submit?name=testFile.txt')
             .expect('Content-Type', /text\/plain/)
-            .expect(200,    `It is a file name.File content:\r\nSome values in here\r\nLine1\r\nLine2\r\nLine3;\r\n\r\nint main(void){\r\n    printf("some code in gere for %d times", 34);\r\n}`, done);    
+            .expect(200,    'It is a file name. File content:\n' +
+            'Some values in here\r\n' +
+            'Line1\r\n' +
+            'int main(void){\r\n' +
+            '    printf("some code in here for %d times", 34);\r\n' +
+            '}\r\n', done);    
     });
 });
