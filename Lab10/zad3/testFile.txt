@@ -1,0 +1,8 @@
+Some values in here
+Line1
+Line2
+Line3
+
+int main(void){
+    printf("some code in here for %d times", 34);
+}

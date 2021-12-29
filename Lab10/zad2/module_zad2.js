@@ -13,10 +13,10 @@ exports.isDir = (name) => {
             try {        
                 data = fs.readFileSync(name, 'utf8')
                 console.log(data)
-            } catch (err){console.log(err); return 'error'}
+            } catch (err){return 'error'}
             return 'file';
         } else {
             return 'error';
         }
-    } catch (err){console.log(err); return 'error'}
+    } catch (err){return 'error'}
 }
