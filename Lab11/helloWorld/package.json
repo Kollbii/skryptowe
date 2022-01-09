@@ -4,13 +4,23 @@
   "description": "First Hello World application",
   "main": "index.js",
   "scripts": {
-    "test": "npx mocha"
+    "test": "npx mocha",
+    "start": "node app2.js",
+    "app1": "echo 'Uruchamiam aplikację nr 1' && node app1.js",
+    "app2": "echo 'Uruchamiam aplikację nr 2' && node app2.js"
   },
   "author": "Lukasz Kollbek",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2",
+    "helloWorld": "^1.0.0",
     "morgan": "^1.10.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-json": "^1.0.0",
+    "supertest": "^6.1.6"
   }
 }
