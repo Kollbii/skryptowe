@@ -16,6 +16,7 @@
     "eslint-plugin-import": "^2.25.3"
   },
   "devDependencies": {
+    "esm": "^3.2.25",
     "supertest": "^6.1.6"
   }
 }

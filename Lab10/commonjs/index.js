@@ -6,3 +6,5 @@ let op = new things.Operation(args[0], args[1]);
 
 // node index "43" 3
 console.log(op.sum())
+
+// Call: node .\index.js 1 "989"

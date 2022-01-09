@@ -6,15 +6,13 @@ async function writeDataFromFile(res, abs_path){
     console.log(abs_path);
 
     fs.stat(abs_path, (err, stats) => {
-        console.log(err, stats);
         if (err){
             res.write('Could not find this file/dir. Optionally got error.');
             res.end();
         } else if (stats.isFile()){
             fs.readFile(abs_path, (err, data) => {
                 if (err) throw err;
-                console.log('Reading file.');
-                console.log(data);
+                console.log('Reading file.', data);
                 res.write("It is a file name. File content:\n" + data);
                 res.end();
             });
