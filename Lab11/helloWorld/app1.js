@@ -7,6 +7,16 @@ var app = express();
 var x = 1;
 var y = 9;
 
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+mongoose.connect('mongodb://localhost:12312/lab');
+const Table = new Schema({
+    o: String,
+    x: Number,
+    y: Number
+});
+const Tb = mongoose.model('Tb', Table);
+
 function sum(x, y){return x + y};
 
 // Determining the contents of the middleware stack
@@ -22,8 +32,7 @@ app.get('/json/:name', (req, res) => {
     let data = JSON.parse(fs.readFileSync(req.params.name + '.json'));
     
     repr = '';
-    repr += `
-    <table>
+    repr += `<table>
     <tr>
         <th>x</th>
         <th>Operation</th>
@@ -43,6 +52,20 @@ app.get('/json/:name', (req, res) => {
     repr += `</table>`
     res.send(`<h1>${repr}</h1>`);
 });
+
+app.get('/calculate/:operation/:x/:y',  (req, res) =>{
+    // IN URL WRITE %2F FOR '/' SIGN
+    if (['+', '-', '*', '/'].includes(req.params.operation)){
+        let tmp = new Tb({o: req.params.operation, x: req.params.x, y: req.params.y});
+        tmp.save();
+        repr = `${req.params.x} ${req.params.operation} ${req.params.y} = ${eval(req.params.x + req.params.operation + req.params.y)}`;
+        res.send(repr);
+    } else {
+        throw Error("Invalid operation");
+    }
+});
+
+
 // The application is to listen on port number 3000
 app.listen(3000, function () {
     console.log('The application is available on port 3000');

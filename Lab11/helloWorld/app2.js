@@ -3,49 +3,58 @@ var express = require('express'),
     logger = require('morgan');
 var fs = require('fs');
 var app = express();
+
+
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+mongoose.connect('mongodb://localhost:12312/lab');
+const Table = new Schema({
+    o: String,
+    x: Number,
+    y: Number
+});
+const Equation = mongoose.model('Equation', Table);
+
 var x = 1;
 var y = 5;
 
 function sum(x, y){return x + y};
 
 // Configuring the application
-app.set('views', __dirname + '\\views\\'); // Files with views can be found in the 'views' directory
-app.set('view engine', 'pug');          // Use the 'Pug' template system
+app.set('views', __dirname + '\\views\\');
+app.set('view engine', 'pug');
 
 // Determining the contents of the middleware stack
-app.use(logger('dev'));                         // Add an HTTP request recorder to the stack — every request will be logged in the console in the 'dev' format
-// app.use(express.static(__dirname + '/public')); // Place the built-in middleware 'express.static' — static content (files .css, .js, .jpg, etc.) will be provided from the 'public' directory
+app.use(logger('dev'));
 
 // Route definitions
-app.get('/', function (req, res) {      // The first route
-    res.send(`<h1>Summing numbers hardcoded inside!</h1><p> ${x} + ${y} = ${sum(x, y)}</p>`);
+app.get('/', function (req, res) {
+    res.render('index', {sum: `${x} + ${y} = ${sum(x, y)}`});
 });
 
 app.get('/json/:name', (req, res) => {
-    let data = JSON.parse(fs.readFileSync(req.params.name + '.json'));
-    
-    repr = '';
-    repr += `
-    <table class='table'>
-    <tr>
-        <th>x</th>
-        <th>Operation</th>
-        <th>y</th>
-        <th>Result</th>
-    </tr>
-    `
-    data.forEach(element => {
-        repr += '<tr>'
-        repr += `<td>${element.x}</td>`;
-        repr += `<td>${element.o}</td>`;
-        repr += `<td>${element.y}</td>`;
-        result = eval(element.x + element.o + element.y); // Make operation happen
-        repr += `<td>${result}</td>`;
-        repr += "</tr>";
-    });
-    repr += `</table>`
-    res.send(`<h1>${repr}</h1>`);
+    res.render('index', {represent_table: JSON.parse(fs.readFileSync(req.params.name + '.json'))});
 });
+
+app.get('/calculate/:operation/:x/:y',  (req, res) =>{
+    // IN URL WRITE %2F FOR '/' SIGN
+    if (['+', '-', '*', '/'].includes(req.params.operation)){
+        let tmp = new Equation({o: req.params.operation, x: req.params.x, y: req.params.y});
+        console.log(tmp);
+        tmp.save();
+        repr = `${req.params.x} ${req.params.operation} ${req.params.y} = ${eval(req.params.x + req.params.operation + req.params.y)}`;
+        res.render('index', {sum: repr});
+    } else {
+        throw Error("Invalid operation");
+    }
+});
+
+app.get('/results', (req, res) => {
+    let data = Equation.find(); // Get everything
+    console.log(data);
+    res.render('index', {represent_table: data});
+});
+
 // The application is to listen on port number 3000
 app.listen(3000, function () {
     console.log('The application is available on port 3000');
