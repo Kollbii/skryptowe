@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Form
+    </title>
+    <script>
+    let imie;
+
+    function requestAJAX() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (this.readyState == XMLHttpRequest.DONE) { // If the response is ready
+          if (this.status == 200) {                   // If the request was correct
+            if (this.getResponseHeader('content-type') !== 'application/xml') {
+              // If the received data is plain text or a JSON document
+              var received_data = this.responseText; // Get a response in the form of a string
+              window.alert(received_data);           // and display it
+            }
+            else {
+              //If the received data is an XML document
+              var xmlDoc = this.responseXML; // Get the response in the form of an "XmlDocument" object that can be accessed through DOM methods — see https://www.w3.org/TR/domcore/
+              window.alert(xmlDoc);
+              console.log(xmlDoc);
+            }
+          }
+          else
+            window.alert('There was a problem with this request.');
+        }
+      };
+      xhr.open('GET', '/submit', true);
+      xhr.send(null);
+    }
+
+    function response(xhr) {
+      if (xhr.readyState == XMLHttpRequest.DONE) { // If the response is ready
+        if (xhr.status == 200) {                   // If the request was correct
+          window.alert(xhr.responseText); // Get a response in the form of a string
+        }
+      }
+      else
+        window.alert('There was a problem with this request.');
+    }
+
+    function AJAXGET(){
+        let xhr = new XMLHttpRequest();
+        let uri = `/submit?imie=${encodeURIComponent(imie.value)}`;
+        xhr.open('GET', uri, false);
+        xhr.onreadystatechange = () => response(xhr);
+        xhr.send(null);
+    }
+
+    function AJAXPOST(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', "/post", false);
+        xhr.onreadystatechange = () => response(xhr);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(`imie=${encodeURIComponent(imie.value)}`);
+    }
+
+    function FETCHGET(){
+      let uri = `/submit?imie=${encodeURIComponent(imie.value)}`;
+      fetch(uri)
+        .then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          response.text().then((text) => window.alert(text));
+        })
+        .catch(function (error) {
+          window.alert('Error: \n', error);
+        });
+    }
+
+    function FETCHPOST(){
+      let imie = document.getElementById('imie').value;
+      fetch(`/post`, {
+          method: "POST",
+          body: `imie=${imie}`
+      }).then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          response.text().then((text) => window.alert(text));
+        })
+        .catch(function (error) {
+          window.alert('Error: \n', error);
+        });
+    }
+
+    /*********************************************************************************/
+    /* Function that performs (asynchronous) query to the web server using Fetch API */
+    /*********************************************************************************/
+    function requestFetchAPI() {
+      fetch('/submit') // Execution of the (asynchronous) query to the web server — a promise is created
+        .then(function (response) { // if the promise is fulfilled
+          if (!response.ok)
+            throw Error(response.statusText);
+          if (response.headers.get("Content-Type") !== 'application/json')
+            /*CHANGED HERE*/
+            // window.alert(response.text()); // show the Promise object
+            response.text().then((text) => window.alert(text));
+          else
+            //If the received data is a JSON document
+            window.alert(response.json()); // show the Promise object
+
+        })
+        .catch(function (error) { // if the promise is rejected
+          window.alert(error);
+        });
+    }
+    </script>
+  </head>
+  <body onload="imie = document.getElementById('imie');">
+    <main>
+      <form method="get"
+            action="/submit">
+        <label>Perform a query to the web server with the <strong>GET</strong> method</label> 
+            <input type="submit"value="Without using AJAX or Fetch API"> 
+            <input type="button"
+            value="Using AJAX"
+            onclick="requestAJAX()">
+            <input type="button"
+            value="Using Fetch API"
+            onclick="requestFetchAPI()">
+      </form>
+      <form>
+        <span>Imie</span><input type="text" id="imie" value="PodajImie">
+
+        <input type="button"
+          value="AJAX (GET)"
+          onclick="AJAXGET()">
+
+        <input type="button"
+          value="AJAX (POST)"
+          onclick="AJAXPOST()">
+
+        <input type="button"
+          value="FETCH API (GET)"
+          onclick="FETCHGET()">
+
+        <input type="button"
+          value="FETCH API (GET)"
+          onclick="FETCHPOST()">
+      </form>
+    </main>
+  </body>
+</html>

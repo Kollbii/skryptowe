@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Remote Time 8080
+    </title>
+  </head>
+  <body>
+    <main>
+        <form method="get" action="/timezone">
+            <label for="area">Area</label> <input type="text" id="area" value="Europe">
+            <label for="location">Location</label> <input type="text" id="loc" value="Warsaw">
+            <input type="button" value="Pobierz" onclick="downloadTime()"></button>
+        </form>
+        <h1>Remote</h1>
+        <div id='remote'>
+        Remote date and time
+        </div>
+        <!-- ***************** -->
+        <h1>Local</h1>
+        <div id='local'>
+        Local date and time
+        </div>
+    </main>
+    <script>
+        const wTime = "http://worldtimeapi.org/api/timezone"
+        function downloadTime(){
+            remote = document.getElementById('remote');
+            remote.innerHTML = "Downloading data [...]"
+
+            area = document.getElementById('area').value;
+            loc = document.getElementById('loc').value;
+
+            let uri = `${wTime}/${area}/${loc}`;
+            fetch(uri).then((response) => {
+                if(!response.ok){
+                    remote.innerHTML = "Server is overloaded! Try again later!"
+                }
+                response.text().then((text) => {
+                    if (text == 'This website is currently experiencing high load.') {
+                        remote.innerHTML = "Server is overloaded! Try again later!";
+                    } else {
+                        let jsonData = JSON.parse(text);
+                        remote.innerHTML = `
+                            Datetime: ${jsonData.datetime};\n 
+                            DayOfWeek: ${jsonData.day_of_week};\n 
+                            DayOfYear: ${jsonData.day_of_year};\n 
+                            Timezone: ${jsonData.timezone};\n 
+                            UTC Time: ${jsonData.utc_datetime};\n 
+                            UTC Offset: ${jsonData.utc_offset};`;
+                    }
+                });
+            });
+            localTime();
+        }
+
+        function localTime(){
+          let xmlHttp = new XMLHttpRequest();
+          xmlHttp.open('HEAD', window.location.href.toString(), false);
+          xmlHttp.setRequestHeader("Content-Type", "text/html");
+          xmlHttp.send('');
+          loc = document.getElementById('local');
+          console.log(xmlHttp.getResponseHeader("Date"));
+          loc.innerHTML = xmlHttp.getResponseHeader("Date");
+        }
+    </script>
+  </body>
+</html>
